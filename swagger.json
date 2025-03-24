@@ -305,6 +305,124 @@
           }
         }
       }
+    },
+    "/api/shortener/{shortCode}/tracking": {
+      "get": {
+        "summary": "Get the tracking records of a short URL",
+        "description": "Retrieve tracking records for a specific short URL within a specified date range, with pagination support.",
+        "tags": [
+          "Shortener"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortCode",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The short code of the URL to track."
+          },
+          {
+            "in": "query",
+            "name": "startDate",
+            "required": true,
+            "description": "The start date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "required": true,
+            "description": "The end date",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "description": "The page number",
+            "schema": {
+              "type": "number",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "description": "The number of records per page",
+            "schema": {
+              "type": "number",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tracking records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ip": {
+                            "type": "string",
+                            "description": "The IP address"
+                          },
+                          "referer": {
+                            "type": "string",
+                            "description": "The referer"
+                          },
+                          "userAgent": {
+                            "type": "string",
+                            "description": "The user agent"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "description": "The creation time"
+                          }
+                        }
+                      }
+                    },
+                    "paging": {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "number",
+                          "description": "The current page index"
+                        },
+                        "size": {
+                          "type": "number",
+                          "description": "The number of records per page"
+                        },
+                        "total": {
+                          "type": "number",
+                          "description": "The total number of records"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {},

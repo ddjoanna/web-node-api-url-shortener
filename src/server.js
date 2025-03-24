@@ -4,6 +4,7 @@ import specs from "./swagger.js";
 import shortenerRoutes from "./modules/routes/shortener.route.js";
 import redirectRoutes from "./modules/routes/redirect.route.js";
 import qrcodeRoutes from "./modules/routes/qrcode.route.js";
+import sequelize from "./config/database.js";
 
 const app = express();
 // 啟用 Swagger UI
@@ -42,3 +43,8 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
+
+sequelize
+  .authenticate()
+  .then(() => console.log("Database connection established successfully."))
+  .catch((err) => console.error("Unable to connect to the database:", err));
