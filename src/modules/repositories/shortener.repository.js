@@ -42,6 +42,14 @@ class ShortenerRepository {
     };
     await pgPool.query(query);
   }
+
+  static async deleteShortUrl(shortCode) {
+    const query = {
+      text: "UPDATE short_url.urls SET deleted_at = now() WHERE short_code = $1",
+      values: [shortCode],
+    };
+    await pgPool.query(query);
+  }
 }
 
 export default ShortenerRepository;

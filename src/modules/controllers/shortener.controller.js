@@ -1,6 +1,7 @@
 import CreateShortUrlUseCase from "../usecases/create_short_url.usecase.js";
 import GetOriginalUrlUseCase from "../usecases/get_original_url.usecase.js";
 import GetShortUrlClicksUseCase from "../usecases/get_short_url_clicks.usecase.js";
+import DeleteShortUrlUseCase from "../usecases/delete_short_url.usecase.js";
 
 class ShortenerController {
   static async createShortUrl(req, res, next) {
@@ -43,6 +44,19 @@ class ShortenerController {
       if (!clicks) return res.status(404).json({ error: "URL not found" });
 
       res.status(201).json({ clicks: clicks });
+    } catch (error) {
+      console.error("❌ Controller Error:", error);
+      next(error); // 傳遞錯誤給全局錯誤處理器
+    }
+  }
+
+  static async deleteShortUrl(req, res, next) {
+    try {
+      const { shortCode } = req.params;
+      const useCase = new DeleteShortUrlUseCase();
+      await useCase.execute(shortCode);
+
+      res.status(200).json({ message: "Short URL deleted successfully" });
     } catch (error) {
       console.error("❌ Controller Error:", error);
       next(error); // 傳遞錯誤給全局錯誤處理器

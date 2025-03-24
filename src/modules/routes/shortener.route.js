@@ -99,4 +99,29 @@ router.get("/:shortCode", ShortenerController.getOriginalUrl);
  */
 router.get("/:shortCode/clicks", ShortenerController.getClicks);
 
+/**
+ * @swagger
+ * /api/shortener/{shortCode}:
+ *   delete:
+ *     summary: Delete a short URL
+ *     description: Delete a short URL for the given short code
+ *     tags:
+ *       - Shortener
+ *     parameters:
+ *       - in: path
+ *         name: shortCode
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The short code for the short URL.
+ *     responses:
+ *       200:
+ *         description: Short URL deleted successfully
+ *       404:
+ *         description: Short code not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:shortCode", ShortenerController.deleteShortUrl);
+
 export default router;

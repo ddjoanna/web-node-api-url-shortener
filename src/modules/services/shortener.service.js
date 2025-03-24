@@ -80,6 +80,17 @@ class ShortenerService {
   static async getClicks(shortCode) {
     return await ShortenerRepository.getClicks(shortCode);
   }
+
+  static async deleteShortUrl(shortCode) {
+    await ShortenerRepository.deleteShortUrl(shortCode);
+    await this.clearShortUrlCache(shortCode);
+  }
+
+  static async clearShortUrlCache(shortCode) {
+    const cacheKey = this.getCacheKey(shortCode);
+    console.log("🚀 Remove Short URL from Cache:", cacheKey);
+    await redisClient.del(cacheKey);
+  }
 }
 
 export default ShortenerService;
