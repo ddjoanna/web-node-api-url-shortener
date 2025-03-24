@@ -3,6 +3,7 @@ import swaggerUi from "swagger-ui-express";
 import specs from "./swagger.js";
 import shortenerRoutes from "./modules/routes/shortener.route.js";
 import redirectRoutes from "./modules/routes/redirect.route.js";
+import qrcodeRoutes from "./modules/routes/qrcode.route.js";
 
 const app = express();
 // 啟用 Swagger UI
@@ -21,10 +22,12 @@ app.get("/", (req, res) => {
 // 解析 JSON 數據
 app.use(express.json());
 
-// API 路由
-app.use("/api/shortener", shortenerRoutes);
-// 短網址重定向路由
+// 短網址重定向
 app.use("/", redirectRoutes);
+// 短網址
+app.use("/api/shortener", shortenerRoutes);
+// 生成 QR Code
+app.use("/api/qrcode", qrcodeRoutes);
 
 // 全局錯誤處理中間件
 app.use((err, req, res, next) => {
