@@ -11,7 +11,7 @@ class ShortenerRepository {
 
   static async getUrl(shortCode) {
     const query = {
-      text: "SELECT orig_url FROM short_url.urls WHERE short_code = $1",
+      text: "SELECT orig_url FROM short_url.urls WHERE short_code = $1 AND deleted_at IS NULL",
       values: [shortCode],
     };
     const result = await pgPool.query(query);
@@ -20,7 +20,7 @@ class ShortenerRepository {
 
   static async incrementClicks(shortCode) {
     const query = {
-      text: "UPDATE short_url.urls SET clicks = clicks + 1 WHERE short_code = $1",
+      text: "UPDATE short_url.urls SET clicks = clicks + 1, updated_at = now() WHERE short_code = $1 AND deleted_at IS NULL",
       values: [shortCode],
     };
     await pgPool.query(query);
