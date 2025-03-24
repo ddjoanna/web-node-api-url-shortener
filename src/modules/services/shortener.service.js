@@ -91,6 +91,10 @@ class ShortenerService {
     console.log("🚀 Remove Short URL from Cache:", cacheKey);
     await redisClient.del(cacheKey);
   }
+
+  static async get(shortCode) {
+    return await ShortenerRepository.get(shortCode);
+  }
 }
 
 export default ShortenerService;

@@ -124,4 +124,46 @@ router.get("/:shortCode/clicks", ShortenerController.getClicks);
  */
 router.delete("/:shortCode", ShortenerController.deleteShortUrl);
 
+/**
+ * @swagger
+ * /api/shortener/{shortCode}/stats:
+ *   get:
+ *     summary: Get the statistics of a short URL
+ *     description: Get the statistics of a short URL for the given short code
+ *     tags:
+ *       - Shortener
+ *     parameters:
+ *       - in: path
+ *         name: shortCode
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The short code for the short URL.
+ *     responses:
+ *       201:
+ *         description: Short URL statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 originalUrl:
+ *                   type: string
+ *                   description: The original URL
+ *                 totalClicks:
+ *                   type: number
+ *                   description: The total number of clicks
+ *                 createdAt:
+ *                   type: string
+ *                   description: The creation time
+ *                 deletedAt:
+ *                   type: string
+ *                   description: The deletion time
+ *       404:
+ *         description: Short code not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:shortCode/stats", ShortenerController.getShortUrlStats);
+
 export default router;

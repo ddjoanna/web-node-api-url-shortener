@@ -50,6 +50,15 @@ class ShortenerRepository {
     };
     await pgPool.query(query);
   }
+
+  static async get(shortCode) {
+    const query = {
+      text: "SELECT * FROM short_url.urls WHERE short_code = $1",
+      values: [shortCode],
+    };
+    const result = await pgPool.query(query);
+    return result.rows[0] ? result.rows[0] : null;
+  }
 }
 
 export default ShortenerRepository;
