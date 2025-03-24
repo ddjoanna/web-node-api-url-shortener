@@ -43,6 +43,10 @@ class ShortenerService {
     await ShortenerRepository.incrementClicks(shortCode);
   }
 
+  static async recordTracking(info) {
+    await ShortenerRepository.recordTracking(info);
+  }
+
   static async cacheShortUrl(shortCode, originalUrl) {
     const cacheKey = this.getCacheKey(shortCode);
     const ttlInSeconds = 24 * 60 * 60; // TTL: 1 天

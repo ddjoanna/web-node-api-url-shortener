@@ -11,8 +11,15 @@ class RedirectController {
         return res.status(404).send("Short URL not found");
       }
 
+      const trackingInfo = {
+        shortCode,
+        ip: req.ip,
+        referer: req.headers.referer,
+        userAgent: req.headers["user-agent"],
+      };
+
       const useCase = new RedirectOriginalUrlUseCase();
-      const originalUrl = await useCase.execute(shortCode);
+      const originalUrl = await useCase.execute(shortCode, trackingInfo);
 
       if (!originalUrl) {
         return res.status(404).send("Short URL not found");

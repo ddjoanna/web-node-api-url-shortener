@@ -34,6 +34,14 @@ class ShortenerRepository {
     const result = await pgPool.query(query);
     return result.rows[0] ? result.rows[0].clicks : null;
   }
+
+  static async recordTracking(info) {
+    const query = {
+      text: "INSERT INTO short_url.tracking (short_code, ip, referer, user_agent) VALUES($1, $2, $3, $4) RETURNING *",
+      values: [info.shortCode, info.ip, info.referer, info.userAgent],
+    };
+    await pgPool.query(query);
+  }
 }
 
 export default ShortenerRepository;
