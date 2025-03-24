@@ -1,63 +1,113 @@
-import pgPool from "../../config/postgres.js";
+import Url from "../models/url.model.js";
+import Tracking from "../models/tracking.model.js";
 
 class ShortenerRepository {
+  /**
+   * 保存短網址到資料庫
+   * @param {string} originalUrl - 原始網址
+   * @param {string} shortCode - 短碼
+   */
   static async saveUrl(originalUrl, shortCode) {
-    const query = {
-      text: "INSERT INTO short_url.urls(orig_url, short_code) VALUES($1, $2) RETURNING *",
-      values: [originalUrl, shortCode],
-    };
-    await pgPool.query(query);
+    await Url.create({
+      originalUrl: originalUrl,
+      shortCode: shortCode,
+    });
   }
 
+  /**
+   * 根據短碼獲取原始網址
+   * @param {string} shortCode - 短碼
+   * @returns {string|null} 原始網址或 null
+   */
   static async getUrl(shortCode) {
-    const query = {
-      text: "SELECT orig_url FROM short_url.urls WHERE short_code = $1 AND deleted_at IS NULL",
-      values: [shortCode],
-    };
-    const result = await pgPool.query(query);
-    return result.rows[0] ? result.rows[0].orig_url : null;
+    const url = await Url.findOne({
+      where: {
+        shortCode: shortCode,
+        deletedAt: null, // 篩選未刪除的記錄
+      },
+    });
+    return url ? url.originalUrl : null;
   }
 
+  /**
+   * 增加短網址的點擊次數
+   * @param {string} shortCode - 短碼
+   */
   static async incrementClicks(shortCode) {
-    const query = {
-      text: "UPDATE short_url.urls SET clicks = clicks + 1, updated_at = now() WHERE short_code = $1 AND deleted_at IS NULL",
-      values: [shortCode],
-    };
-    await pgPool.query(query);
+    await Url.increment("clicks", {
+      by: 1,
+      where: {
+        shortCode: shortCode,
+        deletedAt: null, // 篩選未刪除的記錄
+      },
+    });
+    await Url.update(
+      { updatedAt: new Date() },
+      {
+        where: {
+          shortCode: shortCode,
+          deletedAt: null,
+        },
+      }
+    );
   }
 
+  /**
+   * 獲取短網址的點擊次數
+   * @param {string} shortCode - 短碼
+   * @returns {number|null} 點擊次數或 null
+   */
   static async getClicks(shortCode) {
-    const query = {
-      text: "SELECT clicks FROM short_url.urls WHERE short_code = $1",
-      values: [shortCode],
-    };
-    const result = await pgPool.query(query);
-    return result.rows[0] ? result.rows[0].clicks : null;
+    const url = await Url.findOne({
+      attributes: ["clicks"],
+      where: {
+        shortCode: shortCode,
+      },
+    });
+    return url ? url.clicks : null;
   }
 
+  /**
+   * 記錄追蹤信息
+   * @param {object} info - 追蹤信息 (shortCode, ip, referer, userAgent)
+   */
   static async recordTracking(info) {
-    const query = {
-      text: "INSERT INTO short_url.tracking (short_code, ip, referer, user_agent) VALUES($1, $2, $3, $4) RETURNING *",
-      values: [info.shortCode, info.ip, info.referer, info.userAgent],
-    };
-    await pgPool.query(query);
+    await Tracking.create({
+      shortCode: info.shortCode,
+      ip: info.ip,
+      referer: info.referer,
+      userAgent: info.userAgent,
+    });
   }
 
+  /**
+   * 刪除短網址 (標記為已刪除)
+   * @param {string} shortCode - 短碼
+   */
   static async deleteShortUrl(shortCode) {
-    const query = {
-      text: "UPDATE short_url.urls SET deleted_at = now() WHERE short_code = $1",
-      values: [shortCode],
-    };
-    await pgPool.query(query);
+    await Url.update(
+      { deletedAt: new Date() },
+      {
+        where: {
+          shortCode: shortCode,
+          deletedAt: null,
+        },
+      }
+    );
   }
 
+  /**
+   * 根據短碼獲取完整記錄
+   * @param {string} shortCode - 短碼
+   * @returns {object|null} 短網址記錄或 null
+   */
   static async get(shortCode) {
-    const query = {
-      text: "SELECT * FROM short_url.urls WHERE short_code = $1",
-      values: [shortCode],
-    };
-    const result = await pgPool.query(query);
-    return result.rows[0] ? result.rows[0] : null;
+    const url = await Url.findOne({
+      where: {
+        shortCode: shortCode,
+      },
+    });
+    return url ? url.toJSON() : null;
   }
 }
 

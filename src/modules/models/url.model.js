@@ -1,33 +1,29 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../config/database.js";
 
-const Tracking = sequelize.define(
-  "Tracking",
+const Url = sequelize.define(
+  "Url",
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
+    originalUrl: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      field: "orig_url",
+    },
     shortCode: {
       type: DataTypes.STRING(6),
       allowNull: false,
       field: "short_code",
     },
-    ip: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      field: "ip",
-    },
-    referer: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-      field: "referer",
-    },
-    userAgent: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      field: "user_agent",
+    clicks: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+      defaultValue: 0,
+      field: "clicks",
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -35,13 +31,22 @@ const Tracking = sequelize.define(
       defaultValue: DataTypes.NOW,
       field: "created_at",
     },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: "updated_at",
+    },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      field: "deleted_at",
+    },
   },
   {
-    tableName: "tracking",
+    tableName: "urls",
     schema: "short_url",
     timestamps: true,
-    updatedAt: false,
   }
 );
 
-export default Tracking;
+export default Url;

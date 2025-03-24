@@ -8,10 +8,10 @@ class GetShortUrlStatsUseCase {
     }
 
     return {
-      originalUrl: record.orig_url,
+      originalUrl: record.originalUrl,
       totalClicks: record.clicks,
-      createdAt: record.created_at,
-      deletedAt: record.deleted_at,
+      createdAt: record.createdAt,
+      deletedAt: record.deletedAt,
     };
   }
 }
