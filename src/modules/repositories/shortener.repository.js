@@ -25,6 +25,15 @@ class ShortenerRepository {
     };
     await pgPool.query(query);
   }
+
+  static async getClicks(shortCode) {
+    const query = {
+      text: "SELECT clicks FROM short_url.urls WHERE short_code = $1",
+      values: [shortCode],
+    };
+    const result = await pgPool.query(query);
+    return result.rows[0] ? result.rows[0].clicks : null;
+  }
 }
 
 export default ShortenerRepository;

@@ -176,6 +176,50 @@
           }
         }
       }
+    },
+    "/api/shortener/{shortCode}/clicks": {
+      "get": {
+        "summary": "Get the number of clicks",
+        "description": "Get the number of clicks for the given short code",
+        "tags": [
+          "Shortener"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortCode",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The short code"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Number of clicks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "clicks": {
+                      "type": "number",
+                      "description": "The number of clicks"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Short code not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "components": {},

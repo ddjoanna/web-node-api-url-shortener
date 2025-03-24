@@ -72,6 +72,10 @@ class ShortenerService {
   static getCacheKey(shortCode) {
     return `short_code:${shortCode}`;
   }
+
+  static async getClicks(shortCode) {
+    return await ShortenerRepository.getClicks(shortCode);
+  }
 }
 
 export default ShortenerService;
