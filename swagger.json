@@ -1,0 +1,183 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Shortener API",
+    "version": "1.0.0",
+    "description": "API for URL shortening"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/qrcode/generate": {
+      "post": {
+        "summary": "Generate QR Code",
+        "description": "Generate QR Code for the given URL with custom logo",
+        "tags": [
+          "QR Code"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url",
+                  "logo"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The URL to generate QR Code"
+                  },
+                  "logo": {
+                    "type": "string",
+                    "description": "The logo URL to embed in QR Code"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The generated QR code image in PNG format",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "format": "base64"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/{shortCode}": {
+      "get": {
+        "summary": "Redirect to the original URL",
+        "description": "Redirect to the original URL for the given short code",
+        "tags": [
+          "Redirect"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortCode",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The short code"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the original URL"
+          },
+          "404": {
+            "description": "Short code not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/shortener/shorten": {
+      "post": {
+        "summary": "Create a short URL",
+        "description": "Create a short URL for the given original URL",
+        "tags": [
+          "Shortener"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The original URL to be shortened"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Short URL created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "shortUrl": {
+                      "type": "string",
+                      "description": "The short URL"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/shortener/{shortCode}": {
+      "get": {
+        "summary": "Get the original URL",
+        "description": "Get the original URL for the given short code",
+        "tags": [
+          "Shortener"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "shortCode",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The short code"
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirect to the original URL"
+          },
+          "404": {
+            "description": "Short code not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}

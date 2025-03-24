@@ -1,4 +1,5 @@
 import swaggerJsDoc from "swagger-jsdoc";
+import fs from "fs";
 
 const options = {
   swaggerDefinition: {
@@ -18,5 +19,7 @@ const options = {
 };
 
 const specs = swaggerJsDoc(options);
+fs.writeFileSync("./swagger.json", JSON.stringify(specs, null, 2));
+console.log("Swagger JSON file generated successfully!");
 
 export default specs;
