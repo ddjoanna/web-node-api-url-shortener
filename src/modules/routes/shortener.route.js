@@ -250,4 +250,8 @@ router.get("/:shortCode/stats", ShortenerController.getShortUrlStats);
  *         description: Internal server error
  */
 router.get("/:shortCode/tracking", ShortenerController.getTrackingRecords);
+
+// TODO: Implement analytics endpoint
+// Note: 依據時間區間提供每日/每週/每月不同顆粒度的數據
+// router.get("/:shortCode/analytics", ShortenerController.getAnalytics);
 export default router;

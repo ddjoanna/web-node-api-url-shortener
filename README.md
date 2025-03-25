@@ -9,3 +9,5 @@
     短網址產生器以及成效追蹤功能
 
 ## API Documentation
+
+    http://localhost:3000/swagger/
