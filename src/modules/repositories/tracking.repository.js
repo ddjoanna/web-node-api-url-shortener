@@ -31,6 +31,17 @@ class TrackingRepository {
       limit,
     };
   }
+
+  static async getRecordsByShortCode(shortCode, startDate, endDate) {
+    const whereConditions = { shortCode };
+    if (startDate || endDate) {
+      whereConditions.createdAt = buildDateRangeFilter(startDate, endDate);
+    }
+
+    return await Tracking.findAll({
+      where: whereConditions,
+    });
+  }
 }
 
 export default TrackingRepository;

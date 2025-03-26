@@ -10,6 +10,14 @@ class TrackingService {
       limit
     );
   }
+
+  static async getRecords(shortCode, startDate, endDate) {
+    return await TrackingRepository.getRecordsByShortCode(
+      shortCode,
+      startDate,
+      endDate
+    );
+  }
 }
 
 export default TrackingService;

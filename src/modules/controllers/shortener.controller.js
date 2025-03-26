@@ -4,6 +4,7 @@ import GetShortUrlClicksUseCase from "../usecases/get_short_url_clicks.usecase.j
 import DeleteShortUrlUseCase from "../usecases/delete_short_url.usecase.js";
 import GetShortUrlStatsUseCase from "../usecases/get_short_url_stats.usecase.js";
 import GetTrackingRecordsUseCase from "../usecases/get_tracking_records.usecase.js";
+import GetTrackingAnalyticsUseCase from "../usecases/get_tracking_analytics.usecase.js";
 import { isValidDate } from "../utils/validation.util.js";
 
 class ShortenerController {
@@ -108,6 +109,38 @@ class ShortenerController {
       );
 
       res.status(200).json(paginationResult);
+    } catch (error) {
+      console.error("❌ Controller Error:", error);
+      next(error); // 傳遞錯誤給全局錯誤處理器
+    }
+  }
+
+  static async getAnalytics(req, res, next) {
+    try {
+      const { shortCode } = req.params;
+      const { startDate, endDate, type = "day" } = req.query;
+
+      if (!shortCode || !startDate || !endDate) {
+        return res.status(400).json({ error: "Missing parameters" });
+      }
+
+      if (startDate && !isValidDate(startDate)) {
+        return res.status(400).json({ error: "Invalid start date format" });
+      }
+
+      if (endDate && !isValidDate(endDate)) {
+        return res.status(400).json({ error: "Invalid end date format" });
+      }
+
+      const useCase = new GetTrackingAnalyticsUseCase();
+      const analyticsResult = await useCase.execute(
+        shortCode,
+        startDate,
+        endDate,
+        type
+      );
+
+      res.status(200).json(analyticsResult);
     } catch (error) {
       console.error("❌ Controller Error:", error);
       next(error); // 傳遞錯誤給全局錯誤處理器

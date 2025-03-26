@@ -251,7 +251,77 @@ router.get("/:shortCode/stats", ShortenerController.getShortUrlStats);
  */
 router.get("/:shortCode/tracking", ShortenerController.getTrackingRecords);
 
-// TODO: Implement analytics endpoint
-// Note: 依據時間區間提供每日/每週/每月不同顆粒度的數據
-// router.get("/:shortCode/analytics", ShortenerController.getAnalytics);
+/**
+ * @swagger
+ * /api/v1/shortener/{shortCode}/analytics:
+ *   get:
+ *     summary: Get tracking analytics for a short URL
+ *     description: Get tracking analytics for a short URL
+ *     tags:
+ *       - Shortener Tracking
+ *     parameters:
+ *       - name: shortCode
+ *         in: path
+ *         description: The short URL
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: startDate
+ *         in: query
+ *         description: The start date for the analytics
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - name: endDate
+ *         in: query
+ *         description: The end date for the analytics
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - name: type
+ *         in: query
+ *         description: The type of analytics to retrieve
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - daily
+ *             - weekly
+ *             - monthly
+ *             - yearly
+ *           default: daily
+ *     responses:
+ *       200:
+ *         description: Tracking analytics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               additionalProperties:
+ *                 type: object
+ *                 properties:
+ *                   totalClicks:
+ *                     type: number
+ *                     description: The total number of clicks
+ *                   uniqueIPs:
+ *                     type: number
+ *                     description: The number of unique IP addresses
+ *                   deviceClicks:
+ *                     type: object
+ *                     properties:
+ *                       mobile:
+ *                         type: number
+ *                         description: The number of clicks from mobile devices
+ *                       desktop:
+ *                         type: number
+ *                         description: The number of clicks from desktop devices
+ *                       other:
+ *                         type: number
+ *                         description: The number of clicks from other devices
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:shortCode/analytics", ShortenerController.getAnalytics);
 export default router;
