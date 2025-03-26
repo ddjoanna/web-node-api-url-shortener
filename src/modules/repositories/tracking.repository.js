@@ -2,7 +2,7 @@ import Tracking from "../models/tracking.model.js";
 import { buildDateRangeFilter } from "../utils/filter.util.js";
 
 class TrackingRepository {
-  static async paginateByShortCode(
+  static async getRecordsWithPagination(
     shortCode,
     startDate,
     endDate,

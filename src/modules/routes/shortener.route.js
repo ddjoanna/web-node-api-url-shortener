@@ -173,7 +173,7 @@ router.get("/:shortCode/stats", ShortenerController.getShortUrlStats);
  *     summary: Get the tracking records of a short URL
  *     description: Retrieve tracking records for a specific short URL within a specified date range, with pagination support.
  *     tags:
- *       - Shortener
+ *       - Shortener Tracking
  *     parameters:
  *       - in: path
  *         name: shortCode

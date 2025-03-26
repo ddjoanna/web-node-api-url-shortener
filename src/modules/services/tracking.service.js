@@ -1,8 +1,14 @@
 import TrackingRepository from "../repositories/tracking.repository.js";
 
 class TrackingService {
-  static async getTrackingRecords(shortCode, startDate, endDate, page, limit) {
-    return await TrackingRepository.paginateByShortCode(
+  static async getRecordsWithPagination(
+    shortCode,
+    startDate,
+    endDate,
+    page,
+    limit
+  ) {
+    return await TrackingRepository.getRecordsWithPagination(
       shortCode,
       startDate,
       endDate,

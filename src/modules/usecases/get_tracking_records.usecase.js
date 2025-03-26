@@ -2,7 +2,7 @@ import TrackingService from "../services/tracking.service.js";
 
 class GetTrackingRecordsUseCase {
   async execute(shortCode, startDate, endDate, page, limit) {
-    const records = await TrackingService.getTrackingRecords(
+    const records = await TrackingService.getRecordsWithPagination(
       shortCode,
       startDate,
       endDate,
