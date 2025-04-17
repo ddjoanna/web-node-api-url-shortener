@@ -6,9 +6,13 @@ class QrCodeService {
   async generateQrCode(url, options) {
     const qrCodeDataURL = await this.generateQrCodeImage(url);
 
-    const { logo } = options;
-    if (logo) {
-      return await this.addLogoToQrCode(qrCodeDataURL, logo);
+    try {
+      const { logo } = options;
+      if (logo) {
+        return await this.addLogoToQrCode(qrCodeDataURL, logo);
+      }
+    } catch (error) {
+      console.error("Error generating QR code:", error.message);
     }
 
     return qrCodeDataURL;
