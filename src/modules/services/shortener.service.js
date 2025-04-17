@@ -1,5 +1,5 @@
 import { customAlphabet } from "nanoid";
-import redisClient from "../../config/redis.js";
+import redisClient from "../libraries/redis.library.js";
 import ShortenerRepository from "../repositories/shortener.repository.js";
 
 class ShortenerService {
@@ -51,26 +51,17 @@ class ShortenerService {
     const cacheKey = this.getCacheKey(shortCode);
     const ttlInSeconds = 24 * 60 * 60; // TTL: 1 天
 
-    await redisClient.setEx(
-      cacheKey,
-      ttlInSeconds,
-      JSON.stringify({ originalUrl })
-    );
+    await redisClient.setEx(cacheKey, { originalUrl }, ttlInSeconds);
   }
 
   static async getCachedData(cacheKey) {
-    const cachedData = await redisClient.get(cacheKey);
-    return cachedData ? JSON.parse(cachedData) : null;
+    return await redisClient.get(cacheKey);
   }
 
   static async refreshCacheTTL(cacheKey, originalUrl) {
     const ttlInSeconds = 24 * 60 * 60; // TTL: 1 天
 
-    await redisClient.setEx(
-      cacheKey,
-      ttlInSeconds,
-      JSON.stringify({ originalUrl })
-    );
+    await redisClient.setEx(cacheKey, { originalUrl }, ttlInSeconds);
   }
 
   static getCacheKey(shortCode) {

@@ -4,7 +4,7 @@ import specs from "./swagger.js";
 import shortenerRoutes from "./modules/routes/shortener.route.js";
 import redirectRoutes from "./modules/routes/redirect.route.js";
 import qrcodeRoutes from "./modules/routes/qrcode.route.js";
-import sequelize from "./config/database.js";
+import sequelize from "./modules/libraries/database.library.js";
 
 const app = express();
 // 啟用 Swagger UI
